@@ -17,3 +17,9 @@ Thumbs.db
 
 # Editor
 .vscode/
+
+# Ambiente virtual Python
+.venv/
+
+# Bases de dados fictícias originais e consolidadas
+database/seeds/
