@@ -12,7 +12,7 @@ Sistema de gerenciamento e recuperação de informações por meio de artigos e 
 
 ## 1. Objetivo do projeto
 
-Desenvolver um MVP de backend para um catálogo de conhecimento, capaz de armazenar, organizar e recuperar informações estruturadas.
+Desenvolver um MVP de uma base de conhecimento capaz de armazenar, organizar e recuperar informações estruturadas por meio de artigos técnicos.
 
 O projeto utiliza um banco de dados relacional para persistência e um mecanismo especializado para busca textual, demonstrando técnicas de modelagem, integridade dos dados, conteinerização e recuperação da informação.
 
@@ -24,20 +24,23 @@ A aplicação representa um catálogo de conhecimento que permite organizar arti
 
 Cada artigo possui título, identificação por slug, resumo, conteúdo textual, status e datas de criação e atualização.
 
-O sistema deverá permitir:
+O sistema contempla:
 
-- Armazenar artigos com textos longos.
-- Cadastrar e relacionar autores.
-- Organizar artigos por categorias.
-- Classificar artigos por tags.
-- Manter a integridade dos relacionamentos.
-- Realizar pesquisas textuais nos conteúdos.
-- Recuperar resultados conforme a relevância da pesquisa.
-- Demonstrar a recuperação de informações utilizando uma base de dados fictícia de grande volume.
+- Armazenamento de artigos com textos longos.
+- Cadastro e relacionamento de autores.
+- Organização de artigos por categorias.
+- Classificação de artigos por tags.
+- Integridade dos relacionamentos.
+- Pesquisa textual nos conteúdos.
+- Recuperação de resultados conforme a relevância.
+- Consulta individual de artigos.
+- Identificação de artigos relacionados por categorias e tags.
+- Paginação dos resultados.
+- Interface web para demonstrar as funcionalidades.
 
-O foco do MVP é o backend e a persistência dos dados.
+O foco acadêmico principal continua sendo o backend, a persistência dos dados e a recuperação da informação.
 
-**Observação:** a implementação de uma interface gráfica não é exigida nem faz parte dos critérios centrais de avaliação definidos no enunciado.
+**Observação:** a interface gráfica não é um dos critérios centrais de avaliação definidos no enunciado. Foi desenvolvida como recurso complementar para facilitar a demonstração e a utilização do sistema.
 
 ## 3. Tecnologias utilizadas
 
@@ -73,6 +76,16 @@ A pesquisa utiliza pesos diferentes para os campos, priorizando o título, segui
 - dotenv: carregamento das variáveis de ambiente.
 - typesense: comunicação com o mecanismo de busca.
 
+### 3.4. Interface web
+
+A interface foi desenvolvida com tecnologias web básicas:
+
+- HTML: estrutura das páginas.
+- CSS: apresentação visual e responsividade.
+- JavaScript: comunicação com a API e interatividade.
+
+Não foi utilizado um framework frontend.
+
 ## 4. Arquitetura da aplicação
 
 A arquitetura utiliza o PostgreSQL como fonte principal dos dados e o Typesense como índice especializado de pesquisa.
@@ -80,38 +93,75 @@ A arquitetura utiliza o PostgreSQL como fonte principal dos dados e o Typesense 
 ### Responsabilidade dos componentes
 
 **PostgreSQL**
+
 - Armazenamento permanente dos dados.
 - Integridade referencial.
 - Restrições e validações.
 - Relacionamentos entre entidades.
+- Consulta dos dados completos dos artigos.
 
 **Node.js e Express**
+
 - Recebimento das requisições.
 - Comunicação com o banco de dados.
 - Integração com o Typesense.
 - Organização das regras de negócio.
+- Disponibilização da API REST.
 
 **Typesense**
+
 - Indexação dos artigos.
 - Pesquisa textual.
 - Recuperação de resultados.
 - Ordenação por relevância.
 
+**Frontend**
+
+- Apresentação dos resultados da pesquisa.
+- Paginação.
+- Visualização dos detalhes dos artigos.
+- Exibição de artigos relacionados.
+
 **Docker**
+
 - Execução dos serviços em contêineres.
 - Padronização do ambiente de desenvolvimento.
 
 ### Fluxo de pesquisa
 
-1. O cliente envia uma pesquisa à API.
-2. O Express recebe a requisição.
-3. A rota encaminha a solicitação ao controller.
-4. O controller valida os parâmetros.
-5. O serviço consulta o Typesense.
-6. O mecanismo retorna os documentos encontrados.
-7. A API entrega os resultados em formato JSON.
+1. O usuário informa um termo na interface.
+2. O frontend envia uma requisição à API.
+3. O Express recebe a requisição.
+4. A rota encaminha a solicitação ao controller.
+5. O controller valida os parâmetros.
+6. O serviço consulta o Typesense.
+7. O mecanismo retorna os documentos encontrados.
+8. A API entrega os resultados em formato JSON.
+9. O frontend apresenta os resultados ao usuário.
 
 O PostgreSQL permanece como fonte principal dos dados. O índice do Typesense é uma representação utilizada para acelerar a recuperação das informações.
+
+### Fluxo de consulta de um artigo
+
+1. O usuário seleciona um artigo nos resultados.
+2. O frontend solicita os dados completos à API.
+3. A API consulta o PostgreSQL.
+4. O serviço recupera o artigo e seus relacionamentos.
+5. O frontend apresenta o conteúdo completo em uma janela de detalhes.
+6. A aplicação solicita os artigos relacionados ao artigo selecionado.
+
+### Recuperação de artigos relacionados
+
+A identificação de artigos relacionados utiliza os relacionamentos armazenados no PostgreSQL.
+
+O critério atual considera:
+
+- Categorias em comum: 2 pontos.
+- Tags em comum: 1 ponto.
+
+Os artigos são ordenados pela pontuação de relevância, com limite de até 10 resultados.
+
+Essa funcionalidade utiliza os relacionamentos existentes no banco de dados, sem depender de similaridade semântica ou inteligência artificial.
 
 ## 5. Modelagem do banco de dados
 
@@ -152,7 +202,7 @@ O diagrama entidade-relacionamento e a documentação da modelagem estão dispon
 
 O projeto utiliza registros fictícios para demonstrar o funcionamento da persistência e da recuperação de informações.
 
-A consolidação inicial reuniu dados de duas fontes independentes.
+A consolidação inicial reuniu dados de duas fontes independentes: Claude e Antigravity.
 
 **Resultado atualmente carregado no PostgreSQL:**
 
@@ -166,7 +216,9 @@ A consolidação inicial reuniu dados de duas fontes independentes.
 | Relações artigo-categoria | 1.593 |
 | Relações artigo-tag | 2.523 |
 
-Os dados são fictícios e destinados exclusivamente à demonstração acadêmica.
+Os dados foram produzidos para fins de demonstração acadêmica.
+
+Os arquivos originais e os materiais de consolidação permanecem no repositório enquanto sua necessidade é avaliada.
 
 **Pendente:** ampliar a massa de dados e finalizar um procedimento de carga reproduzível, capaz de popular uma instalação limpa sem depender dos bancos de preparação utilizados na consolidação inicial.
 
@@ -204,15 +256,17 @@ A carga inicial de 1.000 artigos foi executada com sucesso:
 
 A sincronização automática do índice após futuras alterações nos artigos permanece como etapa de desenvolvimento.
 
-## 8. API de busca
+## 8. API REST
 
-A aplicação disponibiliza um endpoint REST para pesquisar artigos utilizando o Typesense.
+A aplicação disponibiliza endpoints para pesquisa, consulta individual e recuperação de artigos relacionados.
 
-### Endpoint
+### 8.1. Pesquisa de artigos
+
+**Endpoint:**
 
 `GET /api/busca`
 
-### Parâmetros
+**Parâmetros:**
 
 | Parâmetro | Obrigatório | Descrição |
 |---|---|---|
@@ -220,7 +274,7 @@ A aplicação disponibiliza um endpoint REST para pesquisar artigos utilizando o
 | `pagina` | Não | Número da página. Padrão: 1 |
 | `limite` | Não | Resultados por página. Padrão: 10. Máximo: 50 |
 
-### Exemplos
+**Exemplos:**
 
 Pesquisa simples:
 
@@ -230,7 +284,7 @@ Pesquisa com paginação:
 
 `GET http://localhost:3000/api/busca?q=refatoração&pagina=2&limite=5`
 
-### Exemplo de resposta
+**Exemplo de resposta:**
 
 ```json
 {
@@ -244,14 +298,57 @@ Pesquisa com paginação:
 
 O campo `resultados` contém os artigos encontrados. O exemplo apresenta apenas a estrutura resumida da resposta.
 
-### Validações implementadas
+### 8.2. Consulta individual de artigo
+
+**Endpoint:**
+
+`GET /api/artigos/:id`
+
+Permite recuperar os dados completos de um artigo por meio de seu identificador.
+
+A resposta inclui:
+
+- Identificação.
+- Título.
+- Slug.
+- Resumo.
+- Conteúdo.
+- Status.
+- Datas de criação e atualização.
+- Autores.
+- Categorias.
+- Tags.
+
+**Exemplo:**
+
+`GET http://localhost:3000/api/artigos/405`
+
+A consulta utiliza o PostgreSQL como fonte dos dados.
+
+### 8.3. Artigos relacionados
+
+**Endpoint:**
+
+`GET /api/busca/:id/relacionados`
+
+Retorna artigos relacionados ao identificador informado.
+
+A classificação utiliza categorias e tags em comum, considerando os pesos definidos na regra de relevância.
+
+**Exemplo:**
+
+`GET http://localhost:3000/api/busca/5/relacionados`
+
+O endpoint retorna até 10 artigos, ordenados conforme a pontuação de relevância.
+
+### 8.4. Validações implementadas
 
 - Pesquisa sem termo retorna erro HTTP 400.
 - Paginação inválida é rejeitada.
 - O limite máximo de resultados por página é 50.
 - Erros inesperados são tratados pela API.
 
-### Testes realizados
+### 8.5. Testes realizados
 
 | Teste | Resultado |
 |---|---|
@@ -259,9 +356,35 @@ O campo `resultados` contém os artigos encontrados. O exemplo apresenta apenas 
 | Pesquisa por `refatoração` | 23 resultados encontrados |
 | Pesquisa sem termo | Erro HTTP 400 esperado |
 | Paginação na página 2 | 5 resultados retornados |
+| Pesquisa com tolerância a erros de digitação | Testada |
+| Consulta individual de artigo | Aprovada |
+| Recuperação de artigos relacionados | Aprovada |
 | Conexão com Typesense | Aprovada |
+| Indexação inicial de 1.000 artigos | Aprovada |
 
-## 9. Estrutura do projeto
+## 9. Interface web
+
+Foi desenvolvida uma interface complementar para demonstrar o funcionamento do sistema.
+
+### Funcionalidades implementadas
+
+- Campo de pesquisa de artigos.
+- Apresentação dos resultados em cartões.
+- Exibição da quantidade de resultados encontrados.
+- Paginação.
+- Abertura dos detalhes de um artigo.
+- Exibição de autores, categorias e tags.
+- Apresentação do conteúdo completo.
+- Exibição de artigos relacionados.
+- Navegação entre artigos relacionados.
+- Formatação básica de conteúdo Markdown.
+- Layout responsivo para diferentes tamanhos de tela.
+
+A interface se comunica com o backend por meio dos endpoints REST.
+
+O objetivo é facilitar a demonstração prática da recuperação de informações, sem substituir o foco acadêmico do projeto.
+
+## 10. Estrutura do projeto
 
 ```text
 knowledge-base/
@@ -271,12 +394,15 @@ knowledge-base/
 ├── package.json
 ├── package-lock.json
 ├── README.md
+├── IA_LOG.md
 │
 ├── database/
 │   ├── schema/
 │   │   └── 01_schema.sql
 │   └── seeds/
 │       ├── originais/
+│       │   ├── antigravity/
+│       │   └── claude/
 │       ├── consolidado/
 │       └── relatorios/
 │
@@ -289,6 +415,13 @@ knowledge-base/
 │       ├── 01_comparar_catalogos.py
 │       └── 02_consolidar_bancos.js
 │
+├── public/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── app.js
+│   └── index.html
+│
 └── src/
     ├── config/
     │   ├── database.js
@@ -298,7 +431,8 @@ knowledge-base/
     │   └── buscaController.js
     │
     ├── routes/
-    │   └── buscaRoutes.js
+    │   ├── buscaRoutes.js
+    │   └── artigoRoutes.js
     │
     ├── services/
     │   ├── buscaService.js
@@ -307,7 +441,7 @@ knowledge-base/
     └── server.js
 ```
 
-## 10. Configuração do ambiente
+## 11. Configuração do ambiente
 
 ### Requisitos
 
@@ -356,8 +490,10 @@ npm install
 Em uma instalação nova, depois de iniciar o PostgreSQL, o schema pode ser aplicado com:
 
 ```bash
-cat database/schema/01_schema.sql | docker exec -i knowledge-base-postgres psql -U knowledge_user -d knowledge_base
+cat database/schema/01_schema.sql | docker exec -i knowledge-base-postgres psql -U SEU_USUARIO -d SEU_BANCO
 ```
+
+Os valores de usuário e banco devem corresponder às configurações do arquivo `.env`.
 
 A carga de dados e a criação da coleção de busca também precisam ser executadas antes de testar a pesquisa em um ambiente vazio. Os procedimentos definitivos de inicialização e carga serão documentados após a conclusão dos scripts reproduzíveis.
 
@@ -392,7 +528,19 @@ curl -G "http://localhost:3000/api/busca" \
   --data-urlencode "q=refatoração"
 ```
 
-## 11. Controle de versão
+### Teste de consulta individual
+
+```bash
+curl http://localhost:3000/api/artigos/405
+```
+
+### Teste de artigos relacionados
+
+```bash
+curl http://localhost:3000/api/busca/5/relacionados
+```
+
+## 12. Controle de versão
 
 O Git é utilizado para registrar a evolução do projeto.
 
@@ -404,11 +552,14 @@ Exemplos:
 - `feat: configura PostgreSQL com Docker`
 - `feat: integra Typesense ao backend`
 - `feat: implementa endpoint de busca`
+- `feat: implementa consulta de artigos`
+- `feat: adiciona interface web`
+- `feat: implementa artigos relacionados`
 - `docs: atualiza documentação da API`
 
 O repositório remoto está hospedado no GitHub.
 
-## 12. Uso da inteligência artificial
+## 13. Uso da inteligência artificial
 
 A inteligência artificial é utilizada como copiloto técnico durante o desenvolvimento.
 
@@ -424,7 +575,7 @@ Sua utilização contempla:
 
 As decisões técnicas, adaptações, testes e utilização da IA deverão ser registrados no arquivo `IA_LOG.md`, conforme solicitado nas diretrizes do trabalho.
 
-## 13. Etapas de desenvolvimento
+## 14. Etapas de desenvolvimento
 
 ### Concluídas
 
@@ -441,6 +592,10 @@ As decisões técnicas, adaptações, testes e utilização da IA deverão ser r
 - [x] Integração do Typesense com o backend.
 - [x] Implementação inicial da API de busca.
 - [x] Testes da pesquisa e da paginação.
+- [x] Implementação da consulta individual de artigos.
+- [x] Implementação da recuperação de artigos relacionados.
+- [x] Criação da interface web para demonstração.
+- [x] Testes da navegação entre artigos.
 
 ### Em desenvolvimento
 
@@ -448,16 +603,21 @@ As decisões técnicas, adaptações, testes e utilização da IA deverão ser r
 - [ ] Criar carga inicial reproduzível em ambiente limpo.
 - [ ] Implementar sincronização automática entre PostgreSQL e Typesense.
 - [ ] Documentar integralmente a execução da aplicação.
-- [ ] Criar o arquivo `IA_LOG.md`.
+- [ ] Revisar e completar o arquivo `IA_LOG.md`.
 - [ ] Validar a instalação completa em ambiente limpo.
 - [ ] Revisar o histórico de commits e a participação da dupla.
 - [ ] Preparar a demonstração da recuperação de informação.
+- [ ] Realizar testes comparativos de desempenho da busca.
 
-## 14. Considerações finais
+## 15. Considerações finais
 
 O Knowledge Base foi desenvolvido para atender à proposta Smart-Base de recuperação de informação, utilizando uma arquitetura baseada em PostgreSQL e Typesense.
 
 A escolha da Trilha B permite demonstrar a integração entre um banco de dados relacional e um mecanismo especializado em busca textual.
+
+O PostgreSQL mantém os dados e seus relacionamentos, enquanto o Typesense oferece recursos especializados para indexação e recuperação textual.
+
+O projeto também possui uma interface web complementar, que permite demonstrar a pesquisa, a visualização dos artigos e a recuperação de conteúdos relacionados.
 
 O desenvolvimento prioriza a integridade dos dados, a recuperação de informações, a organização da arquitetura e a reprodução do ambiente por meio de ferramentas de conteinerização.
 

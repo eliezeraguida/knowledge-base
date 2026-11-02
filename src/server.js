@@ -1,9 +1,18 @@
-
 import express from 'express';
 import buscaRoutes from './routes/buscaRoutes.js';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import artigoRoutes from './routes/artigoRoutes.js';
 
 const app = express();
 const PORTA = process.env.PORT || 3000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/api/artigos', artigoRoutes);
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 app.use(express.json());
 

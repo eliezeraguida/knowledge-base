@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Knowledge Base | Biblioteca Digital</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <div class="container">
+            <h1>Knowledge Base</h1>
+            <p>Sua biblioteca de conhecimento digital</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="apresentacao">
+            <h2>Explore o conhecimento</h2>
+
+            <p>
+                Pesquise artigos, conteúdos e materiais
+                organizados em nossa base de conhecimento.
+            </p>
+        </section>
+
+        <section class="pesquisa">
+
+            <form id="form-pesquisa">
+
+                <input
+                    type="search"
+                    id="campo-pesquisa"
+                    placeholder="O que você deseja aprender?"
+                    aria-label="Pesquisar artigos"
+                    required
+                >
+
+                <button type="submit">
+                    Pesquisar
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="area-resultados">
+
+            <div class="titulo-resultados">
+                <h2>Artigos</h2>
+                <span id="quantidade-resultados"></span>
+            </div>
+
+            <p id="mensagem-status">
+                Digite um termo para começar sua pesquisa.
+            </p>
+
+            <div id="lista-artigos">
+
+                <!-- Os resultados da pesquisa serão inseridos aqui pelo JavaScript -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Janela de leitura do artigo -->
+    <dialog id="modal-artigo" class="modal-artigo">
+
+        <div class="modal-conteudo">
+
+            <button
+                type="button"
+                id="fechar-modal"
+                class="fechar-modal"
+                aria-label="Fechar artigo"
+            >
+                &times;
+            </button>
+
+            <div id="detalhes-artigo">
+
+                <!-- O conteúdo completo do artigo será inserido aqui -->
+
+            </div>
+
+        </div>
+
+    </dialog>
+
+
+    <footer class="rodape">
+        <p>Knowledge Base — Projeto acadêmico de Banco de Dados II</p>
+    </footer>
+
+    <script src="/js/app.js"></script>
+
+</body>
+</html>
